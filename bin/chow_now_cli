@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require './lib/chow_now_cli'
+
+ChowNowCli::Cli.new.call
