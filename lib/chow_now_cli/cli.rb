@@ -36,17 +36,18 @@ class ChowNowCli::Cli
     
 
     def get_user_input
+      value = nil
       value = gets.chomp
       index = value.to_i - 1
 
       #pull category for use as a header
-      food_category = @recipe_categories[index]
+      @food_category = @recipe_categories[index]
       
           selection = validate_category_num(value)
           
           if selection #&& !Meal.recipe_scraped?
             ChowNowCli::Scraper.new(selection)
-            print_meals(food_category)
+            print_meals#(food_category)
 
           #elsif 
             # Meal.scraped_recipes.empty?
@@ -97,15 +98,15 @@ class ChowNowCli::Cli
       
     end
     
-    def print_meals(food_category)
+    def print_meals#(food_category)
 
       table_array=[]
 
-      puts "\e[H\e[2J"
+      #puts "\e[H\e[2J"
 
 
         table = Text::Table.new
-        table.head = ["Number", "#{food_category} Recipes", "Reviews", "Out of 5 Stars", "Prep Time", "Cook Time", "Total Time"]
+        table.head = ["Number", "#{@food_category} Recipes", "Reviews", "Out of 5 Stars", "Prep Time", "Cook Time", "Total Time"]
          
         ChowNowCli::Meal.all_recipes.each_with_index do |recipe, index|
 
@@ -132,6 +133,8 @@ class ChowNowCli::Cli
         end
 
         puts table.to_s
+
+        @table = table.to_s
       
         puts
         puts "Enter menu number <or> 'x' to exit <or> 'm' for main menu"
@@ -169,8 +172,11 @@ class ChowNowCli::Cli
               
               elsif 
                   option == 'M' || option == 'm'
-                    
+
+                    ChowNowCli::Meal.save_scraped_recipes  
                     main_menu
+                    #must delete meals array to perform a new scrape
+
                   
                 else
                   puts "#{option}" " is not a valid option. Enter a value between " "#{min_num}" " and" " #{max_num}:"  
@@ -182,12 +188,13 @@ class ChowNowCli::Cli
       
     def view_additional_recipes
      input = nil
-     puts "Would you like to view additional #{@food_type} recipes enter 'y' yes <or> 'n' no "
-      
+     puts "Would you like to view additional #{@food_category} recipes enter 'y' yes <or> 'n' no "
       input = gets.chomp
       
       if input == "Y" || input == "y"
-        print_meals(recipe)
+        puts @table
+        puts "Enter menu number <or> 'x' to exit <or> 'm' for main menu"
+        get_menu_selection     
         
         # #1. save the contents of previous selection to a saved array
         # #to prevent rescraping  
@@ -196,7 +203,9 @@ class ChowNowCli::Cli
         # main_menu
         
           elsif input == "N" ||input == "n"
-            end_program
+            
+            puts "Enter 'm' for main menu menu <or> 'x' to exit"
+            get_menu_selection
         
           else
             puts "#{input}" " is not a valid option."
@@ -207,8 +216,9 @@ class ChowNowCli::Cli
 
     def print_recipe_details(recipe)
 
-        @food_type = recipe.category
-
+        #@food_type = recipe.category
+        puts "RECIPE"
+        puts recipe.title
         puts
         puts "DESCRIPTION"
         puts recipe.description
