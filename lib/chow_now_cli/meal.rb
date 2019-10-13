@@ -3,22 +3,21 @@ class ChowNowCli::Meal
 # 1. Instantiate object based on meal category that is passed in from scraper
 # and create methods 
 
-
-
-  attr_accessor :title, :rating, :description, :url, :prep_time, :cook_time
-  attr_accessor :directions, :reviews, :ingredients, :scraper, :total_time, :category
+  attr_accessor :title, :rating, :description, :recipe_url, :prep_time, :cook_time, :recipe_url, :url
+  attr_accessor :directions, :reviews, :ingredients, :scraper, :total_time, :category, :category_url
   
-  @meal = []
-  # @@meal wil hold instances of meals
+  @@scraped_meals = []
+  # will hold all recipes that have been scraped
   
   @@all_meals = []
-  # @@all_meals will hold the values of all instances of meals created by category. This is the class vairable that will
-  # hold instances to regenerate menus and to check to see if a categoiry already exists to prevent rescraping data
-  #it holds the array @@meal which are each instances of a meal
-  
+  # @@all_meals will hold the values of all instances of meals created by category.
 
-  def initialize
+  @@urls = []
+  
+  def initialize#(url)
+    #url is used to see if there is an instance to prevent rescraping 
     self.save_meal
+    #self.load_url(url)
   end
     
     def save_meal
@@ -29,25 +28,34 @@ class ChowNowCli::Meal
       @@all_meals
     end
     
-    # # def self.delete_recipes
-    # #   @meal.clear
-    # # end
+    def self.delete_recipes
+       @@all_meals.clear
+    end
   
     # def self.save_recipes_by_category(recipe)
     #   @meal << recipe
     # end
     
-    # def self.save_scraped_recipes(meal)
-    #    @scraped_recipes << meal
-    #  end
+    def self.save_scraped_recipes
+       @@scraped_meals << @@all_meals   
+       #delete @@all_meals to create new scrape if necessary
+       delete_recipes
+    end
     
-    # # def self.scraped_recipes
-    # #   @scraped_recipes
-    # # end
+    def self.scraped_recipes
+      @@scraped_meals
+    end
+
+    # def self.recipe_scraped?(url)
+    #   self.class.scraped_recipes.empty? ||  
   
-    # def self.recipes_by_category
-    #  @meal
-    # end
+    # # def self.recipes_by_category
+    # #  @meal
+    # # end
+
+    def self.load_url(url)
+      @@urls << url
+    end
 
 end
 

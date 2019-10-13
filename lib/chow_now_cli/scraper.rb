@@ -9,6 +9,8 @@ class ChowNowCli::Scraper
  	#the url will be set to the first page which has approx 26 meals per page.
  	#can iterate to scrape multiple pages of the same meal category
 
+ 	#check also needs to be put in place to see if a page has been scraped
+
   	i=0
 
 		while i  < 1
@@ -29,6 +31,7 @@ class ChowNowCli::Scraper
 				puts "performing first scrape"
 				
 				meal = ChowNowCli::Meal.new
+				#self.class.scraped_urls(url)
 				meal.category = url.split("/")[-2].capitalize
 				meal.title = recipe.css(".fixed-recipe-card__h3").text.strip	
 				meal.description = recipe.css("div.fixed-recipe-card__description").text
@@ -90,4 +93,5 @@ class ChowNowCli::Scraper
 		# binding.pry
 	end
 #get_first_scrape("https://www.allrecipes.com/recipes/200/meat-and-poultry/beef/?page=i")
+	
 end

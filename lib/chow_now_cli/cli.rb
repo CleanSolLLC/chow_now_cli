@@ -1,11 +1,14 @@
 class ChowNowCli::Cli
 
   
-  attr_accessor :scraper, :value, :meal, :selection
+  attr_accessor :scraper, :value, :meal, :selection, :scraped_urls
+
+    @scraped_urls = []
   
   
     def call
       title = "Welcome to the Chow Now CLI"
+      puts
       puts title.rjust(10)
       puts
       main_menu
@@ -14,14 +17,16 @@ class ChowNowCli::Cli
 
     def main_menu 
       @recipe_categories = ["Beef", "Chicken", "Seafood", "Pork", "Turkey", "Vegetarian", "Vegan"]
-      puts "Please select meal type"
-      puts
 
         @recipe_categories.each_with_index do |category, index|
           
           puts "#{index + 1}." " #{category}"
+
+      end
+        puts
+        puts "Please enter a number between '1' and '7' for meal type <or> 'x' to exit"
           
-        end
+
         
         puts
 
@@ -37,11 +42,16 @@ class ChowNowCli::Cli
       #pull category for use as a header
       food_category = @recipe_categories[index]
       
-          selection = validate_category_num (value)
+          selection = validate_category_num(value)
           
-          if selection 
+          if selection #&& !Meal.recipe_scraped?
             ChowNowCli::Scraper.new(selection)
             print_meals(food_category)
+
+          #elsif 
+            # Meal.scraped_recipes.empty?
+            # print_meals(food_category)
+
           else
             get_user_input
           end
@@ -79,15 +89,9 @@ class ChowNowCli::Cli
         
            end_program
 
-        when "s", "S"  
-        
-           #Create logic to check to see if there is an instance of recipes that 
-           #have been saved by the customer
-    
+
         else  
-            puts "#{value} is not a valid option, enter a value betwen 1 and 7"
-            puts "<or> enter 'S' or 's'to view saved recipes"
-            puts "<or> enter 'X' or 'x' to end the program"
+            puts "#{value} is not a valid option, enter a value betwen 1 and 7" "<or> enter 'x' to end the program"
         end
  
       
@@ -130,9 +134,8 @@ class ChowNowCli::Cli
         puts table.to_s
       
         puts
-        puts "Enter menu number OR 'x' to exit OR 'm' for main menu"
+        puts "Enter menu number <or> 'x' to exit <or> 'm' for main menu"
         
-
         get_menu_selection
       
     end
@@ -166,11 +169,12 @@ class ChowNowCli::Cli
               
               elsif 
                   option == 'M' || option == 'm'
+                    
                     main_menu
                   
                 else
                   puts "#{option}" " is not a valid option. Enter a value between " "#{min_num}" " and" " #{max_num}:"  
-                puts "<OR>" " enter [m] to go back to main menu: " "<OR>" " enter [x] to end the program:"
+                puts "<or>" " enter 'm' to go back to main menu: " "<or>" " enter 'x' to end the program:"
                 get_menu_selection
         end
         view_additional_recipes
@@ -178,18 +182,18 @@ class ChowNowCli::Cli
       
     def view_additional_recipes
      input = nil
-     puts "Would you like to view additional recipes enter <Y> Yes OR <N> No "
+     puts "Would you like to view additional #{@food_type} recipes enter 'y' yes <or> 'n' no "
       
       input = gets.chomp
       
       if input == "Y" || input == "y"
+        print_meals(recipe)
         
-        #1. push content of  @meal to @@all_meals
-        Meal.save_all_recipes
+        # #1. save the contents of previous selection to a saved array
+        # #to prevent rescraping  
+        # ChowNowCli::Meal.save_scraped_recipes
         
-        #2. should delete contenst 0f @meal
-        Meal.delete_recipes
-        main_menu
+        # main_menu
         
           elsif input == "N" ||input == "n"
             end_program
@@ -203,6 +207,9 @@ class ChowNowCli::Cli
 
     def print_recipe_details(recipe)
 
+        @food_type = recipe.category
+
+        puts
         puts "DESCRIPTION"
         puts recipe.description
         puts
@@ -215,6 +222,8 @@ class ChowNowCli::Cli
         puts "DIRECTIONS"
         recipe.directions.select{|dir| puts "#{dir}"}
         puts
+
+
 
     end
     
