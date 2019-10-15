@@ -7,9 +7,10 @@ class ChowNowCli::Cli
   
   
     def call
+      clear_screen
       title = "Welcome to the Chow Now CLI"
       puts
-      puts title.rjust(10)
+      puts title.rjust(30)
       puts
       main_menu
     end
@@ -20,7 +21,7 @@ class ChowNowCli::Cli
 
         @recipe_categories.each_with_index do |category, index|
           
-          puts "#{index + 1}." " #{category}"
+          puts "   #{index + 1}." "   #{category}"
 
       end
         puts
@@ -34,7 +35,6 @@ class ChowNowCli::Cli
         
     end
     
-
     def get_user_input
       value = nil
       value = gets.chomp
@@ -45,9 +45,10 @@ class ChowNowCli::Cli
       
           selection = validate_category_num(value)
           
-          if selection #&& !Meal.recipe_scraped?
+          if selection && !ChowNowCli::Meal.recipe_scraped?
             ChowNowCli::Scraper.new(selection)
-            print_meals#(food_category)
+            scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
+            print_meals(scraped_meals)
 
           #elsif 
             # Meal.scraped_recipes.empty?
@@ -98,17 +99,16 @@ class ChowNowCli::Cli
       
     end
     
-    def print_meals#(food_category)
+    def print_meals(scraped_meals)
 
+      clear_screen
       table_array=[]
-
-      #puts "\e[H\e[2J"
-
+      table = nil
 
         table = Text::Table.new
         table.head = ["Number", "#{@food_category} Recipes", "Reviews", "Out of 5 Stars", "Prep Time", "Cook Time", "Total Time"]
          
-        ChowNowCli::Meal.all_recipes.each_with_index do |recipe, index|
+        scraped_meals.each_with_index do |recipe, index|
 
             #handles the formatting of columns
 
@@ -131,38 +131,31 @@ class ChowNowCli::Cli
             table.rows << table_array
              
         end
-
+        @table = table.to_s
         puts table.to_s
 
-        @table = table.to_s
-      
         puts
         puts "Enter menu number <or> 'x' to exit <or> 'm' for main menu"
         
-        get_menu_selection
-      
-    end
+        option = gets.chomp
+        validate_table_input (option, scraped_meals)
+
+    end      
     
-     def get_menu_selection
+    def validate_table_input (option, scraped_meals)
       
-      option = gets.chomp
-      validate_input (option)
-      
-    end
-    
-    def validate_input (option)
-      
-      max_num = (ChowNowCli::Meal.all_recipes.length).to_i
+      max_num = (scraped_meals.length).to_i
       min_num = 1
     
       if option.to_i.between?(min_num, max_num)
       
-        ChowNowCli::Meal.all_recipes.each_with_index do |recipe, index|
+        scraped_meals.each_with_index do |recipe, index|
           if index == option.to_i-1
     
             print_recipe_details(recipe)
+            view_additional_recipes
     
-          end
+            end
           end
         
             
@@ -173,50 +166,56 @@ class ChowNowCli::Cli
               elsif 
                   option == 'M' || option == 'm'
 
-                    ChowNowCli::Meal.save_scraped_recipes  
-                    main_menu
-                    #must delete meals array to perform a new scrape
+                    #ChowNowCli::Meal.save_scraped_recipes  
+                    clear_screen
+                    call
+    
 
                   
                 else
                   puts "#{option}" " is not a valid option. Enter a value between " "#{min_num}" " and" " #{max_num}:"  
                 puts "<or>" " enter 'm' to go back to main menu: " "<or>" " enter 'x' to end the program:"
-                get_menu_selection
+                get_menu_selection_for_table
         end
-        view_additional_recipes
+        #view_additional_recipes
       end
       
     def view_additional_recipes
-     input = nil
-     puts "Would you like to view additional #{@food_category} recipes enter 'y' yes <or> 'n' no "
-      input = gets.chomp
-      
-      if input == "Y" || input == "y"
-        puts @table
-        puts "Enter menu number <or> 'x' to exit <or> 'm' for main menu"
-        get_menu_selection     
+       input = nil
+       puts "Would you like to view additional #{@food_category} recipes enter 'y' yes <or> 'n' no "
+        input = gets.chomp
         
-        # #1. save the contents of previous selection to a saved array
-        # #to prevent rescraping  
-        # ChowNowCli::Meal.save_scraped_recipes
-        
-        # main_menu
-        
-          elsif input == "N" ||input == "n"
-            
-            puts "Enter 'm' for main menu menu <or> 'x' to exit"
-            get_menu_selection
-        
-          else
-            puts "#{input}" " is not a valid option."
-            view_additional_recipes
+        if input == "Y" || input == "y"
+          puts @table
+          puts "Enter menu number <or> 'x' to exit <or> 'm' for main menu"
+          get_menu_selection_for_table     
+          
+            elsif input == "N" ||input == "n"
+              
+              puts "Enter 'm' for main menu menu <or> 'x' to exit"
+              input = gets.chomp
+
+              if input == 'X' || input == 'x'
+                  end_program
+                
+              elsif input == 'M' || input == 'm'
+                    call
+              else
+                  puts "#{input}" " is not a valid option."
+                  #binding.pry
+                  view_additional_recipes
+              end
+          
+            else
+              puts "#{input}" " is not a valid option."
+              view_additional_recipes
+            end  
+          
         end
-        
-      end
 
     def print_recipe_details(recipe)
 
-        #@food_type = recipe.category
+        clear_screen
         puts "RECIPE"
         puts recipe.title
         puts
@@ -230,13 +229,16 @@ class ChowNowCli::Cli
         puts
 
         puts "DIRECTIONS"
-        recipe.directions.select{|dir| puts "#{dir}"}
+        recipe.directions.reject{|b| b == "Watch Now"}.map{|dir| puts "#{dir}"}
         puts
 
 
-
     end
-    
+
+    def clear_screen
+      system('clear')
+    end
+
     def end_program
       
        puts "Thank you for using the Chow Now CLI!"

@@ -4,12 +4,11 @@ class ChowNowCli::Scraper
 	def initialize(url)
 
  	#this first scrape will pass in url from the Cli class based on a meal type
- 	#ie beef, chicken, fish, etc. 
+ 	#i.e beef, chicken, fish, etc. 
 
  	#the url will be set to the first page which has approx 26 meals per page.
- 	#can iterate to scrape multiple pages of the same meal category
-
- 	#check also needs to be put in place to see if a page has been scraped
+ 	#additional logic provided to iterate to scrape multiple pages of the 
+ 	#same meal category not yet implemented
 
   	i=0
 
@@ -31,7 +30,7 @@ class ChowNowCli::Scraper
 				puts "performing first scrape"
 				
 				meal = ChowNowCli::Meal.new
-				#self.class.scraped_urls(url)
+				meal.category_url = url
 				meal.category = url.split("/")[-2].capitalize
 				meal.title = recipe.css(".fixed-recipe-card__h3").text.strip	
 				meal.description = recipe.css("div.fixed-recipe-card__description").text
@@ -50,9 +49,6 @@ class ChowNowCli::Scraper
 			i=0
 			ChowNowCli::Meal.all_recipes.each do |meals|
 	
-			
-			
-			#meal_url = meals.url
 
 			@doc2 = Nokogiri::HTML(open(meals.url))
 			puts "performing second scrape"
@@ -82,16 +78,9 @@ class ChowNowCli::Scraper
 				#iterate over time_array to extract prep time, cooking time and
 				#total time values
 
-		
-			#binding.pry
-
 			puts "#{meals.url}" "#{i}"
 			i+=1
 			end	#goes with the second scrape
-		
-		# ChowNowCli::Meal.all_recipes
-		# binding.pry
-	end
-#get_first_scrape("https://www.allrecipes.com/recipes/200/meat-and-poultry/beef/?page=i")
+	
 	
 end
