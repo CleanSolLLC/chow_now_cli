@@ -52,7 +52,7 @@ class ChowNowCli::Cli
               print_meals
 
             elsif 
-              #(selection && ChowNowCli::Meal.find_scraped_recipes == "found")
+              (selection ChowNowCli::Meal.recipes_exist?(selection) == "true")
               @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
               print_meals
 
