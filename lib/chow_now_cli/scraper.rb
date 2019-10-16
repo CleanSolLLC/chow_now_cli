@@ -1,4 +1,3 @@
-
 class ChowNowCli::Scraper 
 
 	def initialize(url)
@@ -81,6 +80,6 @@ class ChowNowCli::Scraper
 			puts "#{meals.url}" "#{i}"
 			i+=1
 			end	#goes with the second scrape
-	
+	end
 	
 end
