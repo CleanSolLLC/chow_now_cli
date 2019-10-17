@@ -9,7 +9,7 @@ class ChowNowCli::Scraper
  	#additional logic provided to iterate to scrape multiple pages of the 
  	#same meal category not yet implemented
 
-  	i=0
+   	i=0
 
 		while i  < 1
 			
@@ -28,7 +28,7 @@ class ChowNowCli::Scraper
 				
 				puts "performing first scrape"
 				
-				meal = ChowNowCli::Meal.new
+				meal = ChowNowCli::Meal.new(url)
 				meal.category_url = url
 				meal.category = url.split("/")[-2].capitalize
 				meal.title = recipe.css(".fixed-recipe-card__h3").text.strip	

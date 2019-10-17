@@ -45,24 +45,26 @@ class ChowNowCli::Cli
       
           selection = validate_category_num(value)
           
-          if (selection && ChowNowCli::Meal.recipes_scraped?(selection)) ||
-              (selection && ChowNowCli::Meal.recipes_exist?(selection) == "false")
-              ChowNowCli::Scraper.new(selection)
-              @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
-              print_meals
+          #if (selection && ChowNowCli::Meal.recipes_scraped?(selection)) ||
+              if selection && ChowNowCli::Meal.recipes_not_scraped?
+                ChowNowCli::Scraper.new(selection)
+                @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
+                print_meals
+                
 
-            elsif 
-              (selection ChowNowCli::Meal.recipes_exist?(selection) == "true")
-              @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
-              print_meals
+              elsif 
+                 selection && ChowNowCli::Meal.recipes_exist?(selection)
+                 @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
+                 print_meals
+              end
 
           # elsif 
           #    selection && scraped_meals = Meal.scraped_recipes.empty?
           #    print_meals(scraped_meals)
 
-          else
-            get_user_input
-          end
+              # else
+              #   get_user_input
+              # end
           
     end
       
