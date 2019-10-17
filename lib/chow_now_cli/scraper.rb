@@ -72,6 +72,19 @@ class ChowNowCli::Scraper
 				meals.prep_time = time_array[1]
 				meals.cook_time = time_array[2]
 				meals.total_time = time_array[3]
+
+				#handles the formatting of columns
+
+            meals.prep_time = meals.prep_time.slice(10..).strip if meals.prep_time != nil || meals.prep_time == ""
+            meals.cook_time = meals.cook_time.slice(10..).strip if meals.cook_time != nil || meals.cook_time == ""
+            meals.rating = meals.rating.slice(0,4).strip if meals.rating != nil || meals.rating == ""
+
+            meals.reviews = "0 reviews" if meals.reviews == nil || meals.reviews == ""
+            meals.rating  = "0" if meals.rating == nil || meals.rating == ""
+            
+            meals.prep_time = "****"  if meals.prep_time == nil  || meals.prep_time == ""
+            meals.cook_time = "****"  if meals.cook_time == nil  || meals.cook_time == ""
+            meals.total_time = "****" if meals.total_time == nil || meals.total_time == ""
 				
 				#time_array holds 3 sometimes 4 values including nil
 				#iterate over time_array to extract prep time, cooking time and

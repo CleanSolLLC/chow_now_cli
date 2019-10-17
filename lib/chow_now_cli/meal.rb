@@ -49,9 +49,8 @@ class ChowNowCli::Meal
     end
 
     def self.recipes_exist?(url)
-      all_recipes.each do|recipe|
-      recipe.category_url.include?("url")
-      binding.pry
+      all_recipes.find do|recipe|
+      recipe.category_url[0...-7].include?(url)
     end
     
     end

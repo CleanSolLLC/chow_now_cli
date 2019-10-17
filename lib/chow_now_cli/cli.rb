@@ -120,22 +120,6 @@ class ChowNowCli::Cli
          
         @scraped_meals.each_with_index do |recipe, index|
 
-            #handles the formatting of columns
-
-            recipe.prep_time = recipe.prep_time.slice(10..).strip if recipe.prep_time != nil || recipe.prep_time == ""
-            recipe.cook_time = recipe.cook_time.slice(10..).strip if recipe.cook_time != nil || recipe.cook_time == ""
-            recipe.rating = recipe.rating.slice(0,4).strip if recipe.rating != nil || recipe.rating == ""
-
-            recipe.reviews = "0 reviews" if recipe.reviews == nil || recipe.reviews == ""
-            recipe.rating  = "0" if recipe.rating == nil || recipe.rating == ""
-            
-            recipe.prep_time = "****"  if recipe.prep_time == nil  || recipe.prep_time == ""
-            recipe.cook_time = "****"  if recipe.cook_time == nil  || recipe.cook_time == ""
-            recipe.total_time = "****" if recipe.total_time == nil || recipe.total_time == ""
-
-
-
-
             table_array = "#{index + 1}" ". ",  "#{"%-45s" % recipe.title.slice(0,45)}","#{recipe.reviews}","#{recipe.rating}", "#{recipe.prep_time}", "#{recipe.cook_time}", "#{recipe.total_time}"
         
             table.rows << table_array
