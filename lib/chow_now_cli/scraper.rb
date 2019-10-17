@@ -5,7 +5,7 @@ class ChowNowCli::Scraper
  	#this first scrape will pass in url from the Cli class based on a meal type
  	#i.e beef, chicken, fish, etc. 
 
- 	#the url will be set to the first page which has approx 26 meals per page.
+ 	#the url will be set to the first page which has approx 26 meal per page.
  	#additional logic provided to iterate to scrape multiple pages of the 
  	#same meal category not yet implemented
 
@@ -36,62 +36,54 @@ class ChowNowCli::Scraper
 				meal_url = recipe.css("a").attr("href").value
 				meal.url = meal_url
 				puts "#{url}"
-			end
-				end
-				end
-		i+=1
-		end
-		get_second_scrape(url)
-	end
-			
-	def get_second_scrape(url)
-			i=0
-			ChowNowCli::Meal.all_recipes.each do |meals|
-			   if meals.url == url		
-					@doc2 = Nokogiri::HTML(open(meals.url))
-					puts "performing second scrape"
-					time_array = []
-					ingredients_array = []
-  					directions_array = []
 
-					meals.rating = @doc2.css(".rating-stars//@data-ratingstars").text.strip
-					@doc2.css(".recipe-directions__list--item").collect do |dir|
+				@doc2 = Nokogiri::HTML(open(meal.url))
+				puts "performing second scrape"
+				time_array = []
+				ingredients_array = []
+	  			directions_array = []
+
+				meal.rating = @doc2.css(".rating-stars//@data-ratingstars").text.strip
+				@doc2.css(".recipe-directions__list--item").collect do |dir|
 					directions_array << dir.text.strip
 					end
-					meals.directions = directions_array
-					meals.reviews = @doc2.css(".review-count").text.strip
-					@doc2.css(".checkList__line").collect do |list| 
+				meal.directions = directions_array
+				meal.reviews = @doc2.css(".review-count").text.strip
+				@doc2.css(".checkList__line").collect do |list| 
 					ingredients_array << list.text.strip
 					end
-					meals.ingredients = ingredients_array
+				meal.ingredients = ingredients_array
 
-					@doc2.css(".prepTime__item").collect do |time|
+				@doc2.css(".prepTime__item").collect do |time|
 					time_array << time.values[1]
 					end
-					meals.prep_time = time_array[1]
-					meals.cook_time = time_array[2]
-					meals.total_time = time_array[3]
+					meal.prep_time = time_array[1]
+					meal.cook_time = time_array[2]
+					meal.total_time = time_array[3]
 
 					#handles the formatting of columns
 
-		            meals.prep_time = meals.prep_time.slice(10..).strip if meals.prep_time != nil || meals.prep_time == ""
-		            meals.cook_time = meals.cook_time.slice(10..).strip if meals.cook_time != nil || meals.cook_time == ""
-		            meals.rating = meals.rating.slice(0,4).strip if meals.rating != nil || meals.rating == ""
+	            meal.prep_time = meal.prep_time.slice(10..).strip if meal.prep_time != nil || meal.prep_time == ""
+	            meal.cook_time = meal.cook_time.slice(10..).strip if meal.cook_time != nil || meal.cook_time == ""
+	            meal.rating = meal.rating.slice(0,4).strip if meal.rating != nil || meal.rating == ""
 
-		            meals.reviews = "0 reviews" if meals.reviews == nil || meals.reviews == ""
-		            meals.rating  = "0" if meals.rating == nil || meals.rating == ""
-		            
-		            meals.prep_time = "****"  if meals.prep_time == nil  || meals.prep_time == ""
-		            meals.cook_time = "****"  if meals.cook_time == nil  || meals.cook_time == ""
-		            meals.total_time = "****" if meals.total_time == nil || meals.total_time == ""
-						
-						#time_array holds 3 sometimes 4 values including nil
-						#iterate over time_array to extract prep time, cooking time and
-						#total time values
+	            meal.reviews = "0 reviews" if meal.reviews == nil || meal.reviews == ""
+	            meal.rating  = "0" if meal.rating == nil || meal.rating == ""
+	            
+	            meal.prep_time = "****"  if meal.prep_time == nil  || meal.prep_time == ""
+	            meal.cook_time = "****"  if meal.cook_time == nil  || meal.cook_time == ""
+	            meal.total_time = "****" if meal.total_time == nil || meal.total_time == ""
+				
+				puts "#{meal.url}" "#{i}"
+				i+=1
 
-					puts "#{meals.url}" "#{i}"
-					i+=1
+			end	
+				#time_array holds 3 sometimes 4 values including nil
+				#iterate over time_array to extract prep time, cooking time and
+				#total time values
+
+				end		
 				end
-				end	#goes with the second scrape
+		end
 	end
 end
