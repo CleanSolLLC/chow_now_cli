@@ -76,7 +76,7 @@ class ChowNowCli::Cli
            return  "https://www.allrecipes.com/recipes/200/meat-and-poultry/beef/"    
           
         when "2" 
-            return "https://www.allrecipes.com/recipes/201/meat-and-poultry/chicken/?internalSource=top%20hubs&referringContentType=Homepage"
+            return "https://www.allrecipes.com/recipes/95/pasta-and-noodles/"
           
         when "3"
             return "https://www.allrecipes.com/recipes/93/seafood/"
