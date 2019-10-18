@@ -8,6 +8,7 @@ class ChowNowCli::Meal
   
  
   @@all_meals = []
+  @@recipe_array = []
 
   # @@all_meals will hold the values of all instances of meals created by category.
   
@@ -31,11 +32,11 @@ class ChowNowCli::Meal
       all_recipes.empty?
     end
 
-    def self.find_scraped_recipes(url)
+    def self.find_scraped_recipes(food_category)
       all_recipes.find_all do |recipe|
-      recipe.category_url == url
-      recipe
-      end
+      recipe.category == food_category
+      #recipe
+     end
     end
 
     def self.recipes_exist?(url)

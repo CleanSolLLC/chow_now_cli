@@ -42,24 +42,25 @@ class ChowNowCli::Cli
 
       #pull category for use as a header
       @food_category = @recipe_categories[index]
+      food_category = @food_category
       
           selection = validate_category_num(value)
           
               if selection && ChowNowCli::Meal.recipes_not_scraped?
                 ChowNowCli::Scraper.new(selection)
                 #move recipe to another array
-                @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
+                @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(food_category)
                 print_meals
 
              elsif
                  selection && ChowNowCli::Meal.recipes_exist?(selection)
-                 @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
+                 @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(food_category)
                  print_meals
 
               else  
                  ChowNowCli::Scraper.new(selection)
                  #move recipe to another array
-                 @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
+                 @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(food_category)
                  print_meals
               end
 
@@ -75,7 +76,7 @@ class ChowNowCli::Cli
            return  "https://www.allrecipes.com/recipes/200/meat-and-poultry/beef/"    
           
         when "2" 
-            return "https://www.allrecipes.com/recipes/201/meat-and-poultry/chicken/"
+            return "https://www.allrecipes.com/recipes/201/meat-and-poultry/chicken/?internalSource=top%20hubs&referringContentType=Homepage"
           
         when "3"
             return "https://www.allrecipes.com/recipes/93/seafood/"
@@ -114,9 +115,9 @@ class ChowNowCli::Cli
 
         table = Text::Table.new
         table.head = ["Number", "#{@food_category} Recipes", "Reviews", "Out of 5 Stars", "Prep Time", "Cook Time", "Total Time"]
-         
+      
         @scraped_meals.each_with_index do |recipe, index|
-
+  
             table_array = "#{index + 1}" ". ",  "#{"%-45s" % recipe.title.slice(0,45)}","#{recipe.reviews}","#{recipe.rating}", "#{recipe.prep_time}", "#{recipe.cook_time}", "#{recipe.total_time}"
         
             table.rows << table_array
