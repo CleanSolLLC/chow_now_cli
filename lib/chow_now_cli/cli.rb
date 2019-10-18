@@ -14,7 +14,7 @@ class ChowNowCli::Cli
 
 
     def main_menu 
-      @recipe_categories = ["Beef", "Chicken", "Seafood", "Pork", "Turkey", "Vegetarian", "Vegan"]
+      @recipe_categories = ["Beef", "Pasta", "Seafood", "Pork", "Turkey", "Vegetarian", "Vegan"]
 
       @max_num = (@recipe_categories.length).to_i
       @min_num = 1

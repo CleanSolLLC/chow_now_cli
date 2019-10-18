@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require './lib/chow_now_cli'
-
+require "bundler/setup"
+require "chow_now_cli"
 ChowNowCli::Cli.new.call
