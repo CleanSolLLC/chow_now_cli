@@ -41,14 +41,19 @@ class ChowNowCli::Cli
       index = value.to_i - 1
 
       #pull category for use as a header
-      @food_category = @recipe_categories[index]
-      food_category = @food_category
+      #url.split("/")[-2].capitalize
+      #@food_category = @recipe_categories[index]
+      
       
           selection = validate_category_num(value)
+
+          food_category = selection.split("/")[-1].capitalize
+          @food_category = food_category
           
               if selection && ChowNowCli::Meal.recipes_not_scraped?
                 ChowNowCli::Scraper.new(selection)
                 #move recipe to another array
+
                 @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(food_category)
                 print_meals
 
@@ -76,7 +81,7 @@ class ChowNowCli::Cli
            return  "https://www.allrecipes.com/recipes/200/meat-and-poultry/beef/"    
           
         when "2" 
-            return "https://www.allrecipes.com/recipes/95/pasta-and-noodles/"
+            return  "https://www.allrecipes.com/recipes/95/pasta-and-noodles/"
           
         when "3"
             return "https://www.allrecipes.com/recipes/93/seafood/"
@@ -108,13 +113,12 @@ class ChowNowCli::Cli
     end
     
     def print_meals
-  
       clear_screen
       table_array=[]
       table = nil
 
         table = Text::Table.new
-        table.head = ["Number", "#{@food_category} Recipes", "Reviews", "Out of 5 Stars", "Prep Time", "Cook Time", "Total Time"]
+        table.head = ["Number", "#{@food_category} Recipes", "Reviews", "5 Stars", "Prep Time", "Cook Time", "Total Time"]
       
         @scraped_meals.each_with_index do |recipe, index|
   
