@@ -102,7 +102,6 @@ class ChowNowCli::Cli
             puts "#{value} is not a valid option."
             prompt_user
         end
-    
       
     end
     
@@ -146,8 +145,7 @@ class ChowNowCli::Cli
             view_additional_recipes
     
             end
-          end
-        
+          end   
             
       elsif
           option == 'X' || option == 'x'
@@ -159,14 +157,12 @@ class ChowNowCli::Cli
                     #ChowNowCli::Meal.save_scraped_recipes  
                     clear_screen
                     call
-    
-
                   
                 else
                   puts "#{option}" " is not a valid option. Enter a value between " "#{min_num}" " and" " #{max_num}:"  
-                puts "<or>" " enter 'm' to go back to main menu: " "<or>" " enter 'x' to end the program:"
-                option = gets.chomp
-                validate_table_input(option)
+                  puts "<or>" " enter 'm' to go back to main menu: " "<or>" " enter 'x' to end the program:"
+                  option = gets.chomp
+                  validate_table_input(option)
         end
         #view_additional_recipes
     end
@@ -219,7 +215,7 @@ class ChowNowCli::Cli
         puts
 
         puts "INGREDIENTS"
-        recipe.ingredients.reject{|a| a == "Add all ingredients to list"}.map{|ing| puts "#{ing}"}.reject  
+        recipe.ingredients.reject{|a| a == "Add all ingredients to list"}.map{|ing| puts "#{ing}"}
 
         puts
 

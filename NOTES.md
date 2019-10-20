@@ -12,14 +12,13 @@ Classes
 
   CLI
     Scraper
-        Recipe
-        	User 
+        Meal
 
 a command line interface for AllRecipes.com
 https://www.allrecipes.com/recipes/
 where user types in chow_now_cli
 
-Normally a user would search for a recipe based on a food type i.e. beef, seafood chicken etc. in a search engine which would return numerous websites. The user then picks a website that would list the recipes. The user picks a recipe that looks at the delicious picture, reads the ratings, descriptions and maybe even the reviews. After all of this effort the user clicks on the recipe directions and notices that she does not have 30 minutes of prep time and 1 hour of cooking time to get the meal prepared for dinner or even worse the user does not have the  ingredients for the recipe! This CLI will eliminate that problem by providng the user with that information earlier in the process.
+Normally a user searches for a recipe based on a food type i.e. beef, seafood, chicken etc. A search engine would return numerous websites and the user would select a website and and do a search of recipes from that particular site. The user picks a recipe that looks delicious based on the picture, the description, ratings and maybe even the reviews. After all of this effort the user clicks on the recipe directions and notices that she/he does not have 30 minutes of prep time and 1 hour of cooking time to get the meal prepared for dinner or even worse the user does not have the  ingredients for the recipe! This CLI will eliminate that problem by providng the user with that information early in the search process.
 
 
 Prints Welcome Message
@@ -27,14 +26,15 @@ Prints Welcome Message
 Welcome to the Chow Now CLI!
 
 	1.Beef
-	2.Chicken
+	2.Pasta
 	3.Seafood
 	4.Pork
 	5.Turkey
 	6.Vegetarian
 	7.Vegan
 
-Enter menu number or 's' for saved recipes or 'x' to exit the program
+Please enter a number between 1 and 7 for meal type <'or'> 'x' to exit
+
 
 <!-- make sure edge case returns invalid selection 
 require user to input valid selection by prompting user for a valid menu number or exit -->
@@ -45,14 +45,14 @@ Based on menu selection i.e. user selects:
    
  # Option 1. Beef -- will return 
    
- Selection (beef) 		Ratings  	Reviewers	Prep Time  Cook Time 	Total Time
+ Selection (beef) 		Reviews  	Stars	Prep Time  Cook Time 	Total Time
 
-  1 Beef Wellington    	5 stars 	500			30 min	   	1 hour		1hr:30 min
-  2 Beef Kabobs			4 stars 	1075	   	1 hr  		45 min		1hr:45 min
-  3 Sirloin				3 stars 	3067		10 min 		30 min		0hr:40 min
-  4 Meat Loaf			3 stars 	499			45 min 		2 hours		2hr:45 min
+  1 Beef Wellington    	500 		5			30 min	   	1 hour		1hr:30 min
+  2 Beef Kabobs			1075 		4		   	1 hr  		45 min		1hr:45 min
+  3 Sirloin				3067		3			10 min 		30 min		0hr:40 min
+  4 Meat Loaf			499			3			45 min 		2 hours		2hr:45 min
   
-<!--  # Option 2. chicken-- will return all chicken recipes same format as beef
+<!--  # Option 2. Pasta-- will return all chicken recipes same format as beef
  # Option 3. Fish 	-- will return all fish recipes same format as beef
  # Option 4. Pork 	-- will return all pork recipes same format as beef
  # Option 5. Turkey -- will return all turkey recipes same format as beef
@@ -66,7 +66,7 @@ Based on menu selection i.e. user selects:
  #require user to input valid selection by prompting the user for a valid menu #number or exit -->
 
 
-   1.Beef Wellington
+   Beef Wellington
 
    <!--  Beef Wellington will return the recipe which also contains the description -->
    
@@ -96,14 +96,20 @@ Based on menu selection i.e. user selects:
 	When the moisture released by the mushrooms has boiled away, remove the mushrooms from the pan and set aside to cool. Etc........
 
 
-    Enter 's' to save recipe; 'p' previous menu ; m' to go back to the main menu or
-	'x' to exit the program
+Would you like to view additional Beef recipes enter 'y' yes <'or'> 'n' no
+
+<!-- 
+If the user enters 'y' the program will return to the page where the reicpes for the category is listed. 
+
+If the user enters 'n' the user will have 2 options.--> 
+
+Enter 'm' to go back to the main menu to select another category in the main menu menu <'or'> 'x' to exit the program 
+
 
 <!-- make sure edge case returns invalid selection 
 require user to input valid selection by prompting user for valid option
 
-Enter 's' to save recipe; 'p' previous menu ; m' to go back to the main menu or
-'x' to exit the program -->
+
 
 
 
