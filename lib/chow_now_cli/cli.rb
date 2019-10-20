@@ -10,6 +10,7 @@ class ChowNowCli::Cli
       puts title.rjust(30)
       puts
       main_menu
+      get_user_input
     end
 
 
@@ -26,12 +27,9 @@ class ChowNowCli::Cli
       end
         puts
         puts "Please enter a number between #{@min_num} and #{@max_num} for meal type <or> 'x' to exit"
-          
-
-        
         puts
 
-        get_user_input
+        #get_user_input
         
     end
     
@@ -40,10 +38,7 @@ class ChowNowCli::Cli
       value = gets.chomp
       index = value.to_i - 1
 
-      #pull category for use as a header
-      #url.split("/")[-2].capitalize
-      #@food_category = @recipe_categories[index]
-      
+      #pull category for use as a header in the table output
       
           selection = validate_category_num(value)
 
@@ -52,8 +47,7 @@ class ChowNowCli::Cli
           
               if selection && ChowNowCli::Meal.recipes_not_scraped?
                 ChowNowCli::Scraper.new(selection)
-                #move recipe to another array
-
+        
                 @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(food_category)
                 print_meals
 
