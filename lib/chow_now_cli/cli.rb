@@ -2,6 +2,8 @@ class ChowNowCli::Cli
 
   
   attr_accessor :scraper, :value, :meal, :selection
+
+  CATEGORIES = ["Beef", "Pasta", "Seafood", "Pork", "Turkey", "Vegetarian", "Vegan"]
   
     def call
       clear_screen
@@ -10,26 +12,32 @@ class ChowNowCli::Cli
       puts title.rjust(30)
       puts
       main_menu
-      get_user_input
+      prompt_user
+      #get_user_input
     end
 
 
     def main_menu 
-      @recipe_categories = ["Beef", "Pasta", "Seafood", "Pork", "Turkey", "Vegetarian", "Vegan"]
-
-      @max_num = (@recipe_categories.length).to_i
-      @min_num = 1
-
-        @recipe_categories.each_with_index do |category, index|
+      
+        CATEGORIES.each_with_index do |category, index|
           
           puts "   #{index + 1}." "   #{category}"
 
       end
+
+      #prompt_user
+    end
+
+    def prompt_user
+
+      max_num = (CATEGORIES.length).to_i
+      min_num = 1
+
         puts
-        puts "Please enter a number between #{@min_num} and #{@max_num} for meal type <or> 'x' to exit"
+        puts "Please enter a number between #{min_num} and #{max_num} for meal type <or> 'x' to exit"
         puts
 
-        #get_user_input
+        get_user_input
         
     end
     
@@ -92,8 +100,7 @@ class ChowNowCli::Cli
 
         else  
             puts "#{value} is not a valid option."
-            puts "Please enter a number between #{@min_num} and #{@max_num} for meal type <or> 'x' to exit"
-            get_user_input
+            prompt_user
         end
     
       
