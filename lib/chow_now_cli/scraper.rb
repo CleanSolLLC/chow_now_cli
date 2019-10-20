@@ -5,9 +5,9 @@ class ChowNowCli::Scraper
  	#this first scrape will pass in url from the Cli class based on a meal type
  	#i.e beef, chicken, fish, etc. 
 
- 	#the url will be set to the first page which has approx 26 meal per page.
- 	#additional logic provided to iterate to scrape multiple pages of the 
- 	#same meal category not yet implemented
+ 	#the url will be set to the first page which has approx 29 meals per page.
+ 	#additional future logic provided o scrape multiple pages of the 
+ 	#same meal category
 
    	i=0
 
@@ -61,7 +61,7 @@ class ChowNowCli::Scraper
 					meal.cook_time = time_array[2]
 					meal.total_time = time_array[3]
 
-					#handles the formatting of columns
+					#handles the formatting of columns for use in ChowNowCli::Cli.print_meals
 
 	            meal.prep_time = meal.prep_time.slice(10..).strip if meal.prep_time != nil || meal.prep_time == ""
 	            meal.cook_time = meal.cook_time.slice(10..).strip if meal.cook_time != nil || meal.cook_time == ""

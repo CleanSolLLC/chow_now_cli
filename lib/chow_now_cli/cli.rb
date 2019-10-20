@@ -44,24 +44,17 @@ class ChowNowCli::Cli
 
           food_category = selection.split("/")[-1].capitalize
           @food_category = food_category
-          
-              if selection && ChowNowCli::Meal.recipes_not_scraped?
-                ChowNowCli::Scraper.new(selection)
         
+              if selection && ChowNowCli::Meal.recipes_not_scraped? || selection && !ChowNowCli::Meal.recipes_exist?(food_category)
+                ChowNowCli::Scraper.new(selection)
                 @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(food_category)
                 print_meals
 
-             elsif
+             else
                  selection && ChowNowCli::Meal.recipes_exist?(selection)
                  @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(food_category)
                  print_meals
-
-              else  
-                 ChowNowCli::Scraper.new(selection)
-                 #move recipe to another array
-                 @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(food_category)
-                 print_meals
-              end
+             end
 
       end
       

@@ -35,13 +35,16 @@ class ChowNowCli::Meal
     def self.find_scraped_recipes(food_category)
       all_recipes.find_all do |recipe|
       recipe.category == food_category
-      #recipe
+      #food_category could be changed later to pass in url to accomodate scraping 
+      #multiple pages of the same category. 
      end
     end
 
-    def self.recipes_exist?(url)
+    def self.recipes_exist?(food_category)
       all_recipes.find do|recipe|
-      recipe.category_url[0...-7].include?(url)
+      recipe.category == food_category ? true : false
+      #food_category could be changed later to url to accomodate scraping 
+      #multiple pages of the same category. 
     end
     
     end
