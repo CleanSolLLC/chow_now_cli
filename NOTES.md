@@ -18,7 +18,7 @@ a command line interface for AllRecipes.com
 https://www.allrecipes.com/recipes/
 where user types in chow_now_cli
 
-Normally a user searches for a recipe based on a food type i.e. beef, seafood, chicken etc. A search engine would return numerous websites and the user would select a website and and do a search of recipes from that particular site. The user picks a recipe that looks delicious based on the picture, the description, ratings and maybe even the reviews. After all of this effort the user clicks on the recipe directions and notices that she/he does not have 30 minutes of prep time and 1 hour of cooking time to get the meal prepared for dinner or even worse the user does not have the  ingredients for the recipe! This CLI will eliminate that problem by providng the user with that information early in the search process.
+Normally a user searches for an online recipe based on a food type i.e. beef, seafood, pasta etc. A search engine returns numerous websites and the user would select a website and search for recipes on that particular site. The user picks a recipe that looks delicious based on pictures, a description, ratings and perhaps by even reading a review or two. After finding that mouth watering recipe and waiting for the images and recipe to load (thanks to banners, pop ups and other annoying distractions that impact load time) the user clicks on the recipe and directions only to find out that she/he does not have the required amount of time to prepare the recipe! Even worse the user has the time but does not have all of the ingredients for the recipe! This CLI will eliminate those problems by providing the user with the necessary information early in the search and selection process for that tasty meal!
 
 
 Prints Welcome Message

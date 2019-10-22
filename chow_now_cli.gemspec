@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["mamark90@gmail.com"]
 
   #must input summary
-  spec.summary       = %q{Write a short summary, because RubyGems requires one.}
+  spec.summary       = %q{Generates recipes based on a food category that a user enters.}
   
   spec.license       = "MIT"
 
