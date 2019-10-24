@@ -1,9 +1,9 @@
 class ChowNowCli::Cli
 
   
-  attr_accessor :scraper, :value, :meal, :selection
+  attr_accessor :scraper, :value, :meal, :selection, :scraper
 
-  CATEGORIES = ["Beef", "Pasta", "Seafood", "Pork", "Turkey", "Vegetarian", "Vegan"]
+  #CATEGORIES = ["Beef", "Pasta", "Seafood", "Pork", "Turkey", "Vegetarian", "Vegan"]
   
     def call
       clear_screen
@@ -11,99 +11,66 @@ class ChowNowCli::Cli
       puts
       puts title.rjust(30)
       puts
+      scraper = ChowNowCli::Scraper.new
+      site_url = "https://www.allrecipes.com/recipes/"
+      ChowNowCli::Scraper.get_scraped_categories(site_url)
       main_menu
       prompt_user
+
       #get_user_input
     end
 
 
     def main_menu 
-      
-        CATEGORIES.each_with_index do |category, index|
+
+        ChowNowCli::Scraper.scraped_categories.each_with_index do |category, index|
           
-          puts "   #{index + 1}." "   #{category}"
-
+          puts "   #{index + 1}." "  #{category.text}".strip
+         
       end
-
       #prompt_user
     end
 
     def prompt_user
 
-      max_num = (CATEGORIES.length).to_i
+      max_num = (ChowNowCli::Scraper.scraped_categories.length).to_i
       min_num = 1
 
-        puts
-        puts "Please enter a number between #{min_num} and #{max_num} for meal type <or> 'x' to exit"
-        puts
+      puts
+      puts "Please enter a number between #{min_num} and #{max_num} for meal type <or> 'x' to exit"
+      puts
 
-        get_user_input
+      option = nil
+      option = gets.chomp
+     
+      if (option.to_i.between?(min_num, max_num))
+
+        selection = ChowNowCli::Scraper.scraped_categories[option.to_i-1].css("a").attr("href").value
+        food_category = selection.split("/")[-1].capitalize
+        @food_category = food_category
         
-    end
-    
-    def get_user_input
-      value = nil
-      value = gets.chomp
-      index = value.to_i - 1
-
-      #pull category for use as a header in the table output
-      
-          selection = validate_category_num(value)
-
-          food_category = selection.split("/")[-1].capitalize
-          @food_category = food_category
-        
-              if selection && ChowNowCli::Meal.recipes_not_scraped? || selection && !ChowNowCli::Meal.recipes_exist?(food_category)
-                ChowNowCli::Scraper.new(selection)
-                @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(food_category)
+              if ChowNowCli::Meal.recipes_not_scraped? || !ChowNowCli::Meal.recipes_exist?(selection)
+                ChowNowCli::Scraper.get_recipes(selection)
+                @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
                 print_meals
 
              else
-                 selection && ChowNowCli::Meal.recipes_exist?(selection)
-                 @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(food_category)
+                 ChowNowCli::Meal.recipes_exist?(selection)
+                 @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
                  print_meals
              end
 
+
+      elsif option == 'X' || option == 'x'
+            end_program
+
+      else puts "#{option}" " is not a valid option. Enter a value between " "#{min_num}" " and" " #{max_num}"
+           prompt_user
+          
       end
-      
 
-     def validate_category_num (value)
+  end      
     
-        case value
-      
-      
-        when "1"
-           return  "https://www.allrecipes.com/recipes/200/meat-and-poultry/beef/"    
-          
-        when "2" 
-            return  "https://www.allrecipes.com/recipes/95/pasta-and-noodles/"
-          
-        when "3"
-            return "https://www.allrecipes.com/recipes/93/seafood/"
-             
-        when "4" 
-            return "https://www.allrecipes.com/recipes/205/meat-and-poultry/pork/"
-            
-        when "5" 
-            return "https://www.allrecipes.com/recipes/206/meat-and-poultry/turkey/"
-
-        when "6" 
-            return "https://www.allrecipes.com/recipes/87/everyday-cooking/vegetarian/"
-
-        when "7" 
-            return "https://www.allrecipes.com/recipes/1227/everyday-cooking/vegan/"
-          
-        when "x", "X"  
-        
-           end_program
-
-
-        else  
-            puts "#{value} is not a valid option."
-            prompt_user
-        end
-      
-    end
     
     def print_meals
       clear_screen
@@ -125,6 +92,7 @@ class ChowNowCli::Cli
 
         puts
         puts "Enter menu number <or> 'x' to exit <or> 'm' for main menu"
+       
         
         option = gets.chomp
         validate_table_input(option)
@@ -162,28 +130,32 @@ class ChowNowCli::Cli
                   puts "#{option}" " is not a valid option. Enter a value between " "#{min_num}" " and" " #{max_num}:"  
                   puts "<or>" " enter 'm' to go back to main menu: " "<or>" " enter 'x' to end the program:"
                   option = gets.chomp
+                 
                   validate_table_input(option)
         end
-        #view_additional_recipes
+  
     end
       
     def view_additional_recipes
 
        input = nil
        puts "Would you like to view additional #{@food_category} recipes enter 'y' yes <or> 'n' no "
+
         input = gets.chomp
         
         if input == "Y" || input == "y"
           clear_screen
           puts @table
           puts "Enter menu number <or> 'x' to exit <or> 'm' for main menu"
+          input = nil
           input = gets.chomp
+         
           validate_table_input(input)   
           
-            elsif input == "N" ||input == "n"
+        elsif input == "N" ||input == "n"
               
-              puts "Enter 'm' for main menu menu <or> 'x' to exit"
-              input = gets.chomp
+            puts "Enter 'm' for main menu menu <or> 'x' to exit"
+            input = gets.chomp
 
                 if input == 'X' || input == 'x'
                     end_program
@@ -196,12 +168,11 @@ class ChowNowCli::Cli
                     view_additional_recipes
                 end
 
-            else
-              puts "#{input}" " is not a valid option."
+          else
+            puts "#{input}" " is not a valid option."
               #binding.pry
               view_additional_recipes
-        end 
-              
+          end 
     end
 
     def print_recipe_details(recipe)
@@ -221,8 +192,7 @@ class ChowNowCli::Cli
 
         puts "DIRECTIONS"
         recipe.directions.reject{|b| b == "Watch Now"}.map{|dir| puts "#{dir}"}
-        puts
-
+                
     end
 
     def clear_screen

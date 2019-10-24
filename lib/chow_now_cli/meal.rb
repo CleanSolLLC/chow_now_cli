@@ -12,7 +12,7 @@ class ChowNowCli::Meal
 
   # @@all_meals will hold the values of all instances of meals created by category.
   
-    def initialize(url)
+    def initialize
      @@all_meals << self
     end
 
@@ -32,17 +32,17 @@ class ChowNowCli::Meal
       all_recipes.empty?
     end
 
-    def self.find_scraped_recipes(food_category)
+    def self.find_scraped_recipes(selection)
       all_recipes.find_all do |recipe|
-      recipe.category == food_category
+      recipe.category_url == selection
       #food_category could be changed later to pass in url to accomodate scraping 
       #multiple pages of the same category. 
      end
     end
 
-    def self.recipes_exist?(food_category)
+    def self.recipes_exist?(selection)
       all_recipes.find do|recipe|
-      recipe.category == food_category ? true : false
+      recipe.category_url == selection ? true : false
       #food_category could be changed later to url to accomodate scraping 
       #multiple pages of the same category. 
     end
