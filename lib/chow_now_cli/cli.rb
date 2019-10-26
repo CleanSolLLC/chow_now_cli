@@ -4,9 +4,9 @@ class ChowNowCli::Cli
   attr_accessor :scraper, :value, :meal, :selection, :scraper
 
      def call
-      clear_screen
-      title = "Welcome to the Chow Now CLI"
-      puts title.rjust(30)
+      # clear_screen
+      # title = "Welcome to the Chow Now CLI"
+      # puts title.rjust(30)
       scraper = ChowNowCli::Scraper.new
       site_url = "https://www.allrecipes.com/recipes/"
       ChowNowCli::Scraper.get_scraped_categories(site_url)
@@ -16,22 +16,59 @@ class ChowNowCli::Cli
 
     def main_menu 
 
+      clear_screen
+      puts
+      title = "Welcome to the Chow Now CLI"
+      puts title.rjust(30)
+      puts
       table_array=[]
+      all_col = []
+      col1 = []
+      col2 = []
+      col3 = []
+      c1_ctr = 1
+      c2_ctr = 33
+      c3_ctr = 65
+
       table = nil
 
         table = Text::Table.new
 
         ChowNowCli::Scraper.scraped_categories.each_with_index do |category, index|
+
+          case index 
+            
+            when 0..31
+              col1 << category.text
+
+            when 32..63
+              col2 << category.text
+
+            when 64..91
+              col3 << category.text
+
+            end
+            
+          end
+
           
-          while index <=30
-      
-            table_array =  "#{index + 1}." "#{category.text}", "#{index + 1}." "#{category.text}", "#{index + 1}." "#{category.text}"  
-        
-            table.rows << table_array
-            break
+           l = col1.length
+           i = 0
+
+           until l == 0  
+          
+              table_array =  "#{c1_ctr}" ". ",  "#{col1[i]}",  "#{c2_ctr}" ". ",  "#{col2[i]}", "#{c3_ctr}" ". ",  "#{col3[i]}"
+             
+              table.rows << table_array
+
+            i+=1
+            c1_ctr+=1
+            c2_ctr+=1
+            c3_ctr+=1
+            l-=1 
+
           end
              
-        end
         @table = table.to_s
         puts table.to_s
 
