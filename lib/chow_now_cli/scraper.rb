@@ -1,4 +1,3 @@
-require 'pry-nav'
 class ChowNowCli::Scraper 
 
 
@@ -61,6 +60,13 @@ class ChowNowCli::Scraper
 		meal.url = meal_url
 		puts "#{url}"
 
+		end		
+		end
+	end
+
+	def self.second_scrape(recipes)
+		i=0
+		recipes.each do |meal|
 		@doc2 = Nokogiri::HTML(open(meal.url))
 		puts "performing second scrape"
 		time_array = []
@@ -100,14 +106,6 @@ class ChowNowCli::Scraper
 		
 		puts "#{meal.url}" "#{i}"
 		i+=1
-
-	#end	
-		#time_array holds 3 sometimes 4 values including nil
-		#iterate over time_array to extract prep time, cooking time and
-		#total time values
-
-		end		
-		end
 	end
-	#end
+	end
 end

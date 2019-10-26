@@ -42,7 +42,7 @@ class ChowNowCli::Meal
 
     def self.recipes_exist?(selection)
       all_recipes.find do|recipe|
-      recipe.category_url == selection ? true : false
+      recipe.category_url == selection || recipe.url == selection ? true : false
       #food_category could be changed later to url to accomodate scraping 
       #multiple pages of the same category. 
     end

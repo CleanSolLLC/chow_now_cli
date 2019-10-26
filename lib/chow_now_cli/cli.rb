@@ -3,9 +3,7 @@ class ChowNowCli::Cli
   
   attr_accessor :scraper, :value, :meal, :selection, :scraper
 
-  #CATEGORIES = ["Beef", "Pasta", "Seafood", "Pork", "Turkey", "Vegetarian", "Vegan"]
-  
-    def call
+     def call
       clear_screen
       title = "Welcome to the Chow Now CLI"
       puts
@@ -15,20 +13,15 @@ class ChowNowCli::Cli
       site_url = "https://www.allrecipes.com/recipes/"
       ChowNowCli::Scraper.get_scraped_categories(site_url)
       main_menu
-      prompt_user
-
-      #get_user_input
     end
 
 
     def main_menu 
-
-        ChowNowCli::Scraper.scraped_categories.each_with_index do |category, index|
-          
-          puts "   #{index + 1}." "  #{category.text}".strip
-         
+       ChowNowCli::Scraper.scraped_categories.each_with_index do |category, index|
+        binding.pry
+           puts "   #{index + 1}." "  #{category.text}".strip 
       end
-      #prompt_user
+      prompt_user
     end
 
     def prompt_user
@@ -46,12 +39,13 @@ class ChowNowCli::Cli
       if (option.to_i.between?(min_num, max_num))
 
         selection = ChowNowCli::Scraper.scraped_categories[option.to_i-1].css("a").attr("href").value
-        food_category = selection.split("/")[-1].capitalize
-        @food_category = food_category
+        @food_category = selection.split("/")[-1].capitalize
+        #@food_category = food_category
         
               if ChowNowCli::Meal.recipes_not_scraped? || !ChowNowCli::Meal.recipes_exist?(selection)
                 ChowNowCli::Scraper.get_recipes(selection)
-                @scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
+                scraped_meals = ChowNowCli::Meal.find_scraped_recipes(selection)
+                @scraped_meals = ChowNowCli::Scraper.second_scrape(scraped_meals)
                 print_meals
 
              else
@@ -106,9 +100,12 @@ class ChowNowCli::Cli
     
       if option.to_i.between?(min_num, max_num)
       
-        @scraped_meals.each_with_index do |recipe, index|
+         @scraped_meals.each_with_index do |recipe, index|
           if index == option.to_i-1
-    
+        #recipe = @scraped_meals[option.to_i-1]
+
+          #ChowNowCli::Scraper.second_scrape(recipe)
+          
             print_recipe_details(recipe)
             view_additional_recipes
     
@@ -124,7 +121,7 @@ class ChowNowCli::Cli
 
                     #ChowNowCli::Meal.save_scraped_recipes  
                     clear_screen
-                    call
+                    main_menu
                   
                 else
                   puts "#{option}" " is not a valid option. Enter a value between " "#{min_num}" " and" " #{max_num}:"  
@@ -161,7 +158,7 @@ class ChowNowCli::Cli
                     end_program
                 
                 elsif input == 'M' || input == 'm'
-                    call
+                    main_menu 
                 else
                     puts "#{input}" " is not a valid option."
                     #binding.pry
