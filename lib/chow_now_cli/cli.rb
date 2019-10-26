@@ -6,9 +6,7 @@ class ChowNowCli::Cli
      def call
       clear_screen
       title = "Welcome to the Chow Now CLI"
-      puts
       puts title.rjust(30)
-      puts
       scraper = ChowNowCli::Scraper.new
       site_url = "https://www.allrecipes.com/recipes/"
       ChowNowCli::Scraper.get_scraped_categories(site_url)
@@ -17,10 +15,27 @@ class ChowNowCli::Cli
 
 
     def main_menu 
-       ChowNowCli::Scraper.scraped_categories.each_with_index do |category, index|
-        binding.pry
-           puts "   #{index + 1}." "  #{category.text}".strip 
-      end
+
+      table_array=[]
+      table = nil
+
+        table = Text::Table.new
+
+        ChowNowCli::Scraper.scraped_categories.each_with_index do |category, index|
+          
+          while index <=30
+      
+            table_array =  "#{index + 1}." "#{category.text}", "#{index + 1}." "#{category.text}", "#{index + 1}." "#{category.text}"  
+        
+            table.rows << table_array
+            break
+          end
+             
+        end
+        @table = table.to_s
+        puts table.to_s
+
+      #end
       prompt_user
     end
 
@@ -29,9 +44,7 @@ class ChowNowCli::Cli
       max_num = (ChowNowCli::Scraper.scraped_categories.length).to_i
       min_num = 1
 
-      puts
       puts "Please enter a number between #{min_num} and #{max_num} for meal type <or> 'x' to exit"
-      puts
 
       option = nil
       option = gets.chomp
