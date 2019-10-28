@@ -27,8 +27,8 @@ class ChowNowCli::Cli
       col2 = []
       col3 = []
       c1_ctr = 1
-      c2_ctr = 33
-      c3_ctr = 65
+      c2_ctr = 31
+      c3_ctr = 61
 
       table = nil
 
@@ -38,13 +38,13 @@ class ChowNowCli::Cli
 
           case index 
             
-            when 0..31
+            when 0..29
               col1 << category.text
 
-            when 32..63
+            when 30..59
               col2 << category.text
 
-            when 64..91
+            when 60..92
               col3 << category.text
 
             end
@@ -58,7 +58,6 @@ class ChowNowCli::Cli
            until l == 0  
           
               table_array =  "#{c1_ctr}" ". ",  "#{col1[i]}",  "#{c2_ctr}" ". ",  "#{col2[i]}", "#{c3_ctr}" ". ",  "#{col3[i]}"
-             
               table.rows << table_array
 
             i+=1
@@ -68,7 +67,7 @@ class ChowNowCli::Cli
             l-=1 
 
           end
-             
+
         @table = table.to_s
         puts table.to_s
 
@@ -78,7 +77,7 @@ class ChowNowCli::Cli
 
     def prompt_user
 
-      max_num = (ChowNowCli::Scraper.scraped_categories.length).to_i
+      max_num = (ChowNowCli::Scraper.scraped_categories.length).to_i-2
       min_num = 1
 
       puts "Please enter a number between #{min_num} and #{max_num} for meal type <or> 'x' to exit"
